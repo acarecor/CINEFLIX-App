@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
@@ -18,7 +18,7 @@ export const MainView = () =>{
         }
         fetch("https://myflix-movies-2a93844126ef.herokuapp.com/movies",
         {
-            headers: {Authorization: 'Bearer ${token}' }
+            headers: {Authorization: `Bearer${token}` }
         })
         .then ((response)=> response.json())
         .then((data) => {
