@@ -4,15 +4,19 @@ import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 
 export const MainView = () =>{
-    const [ movies, setMovies ] = useState ([]);
-    
+    const [ movies, setMovies ] = useState ([]); 
     const [selectedMovie, setSelectedMovie] = useState (null);
+    const [user,setUser] = useState (null);
+    const [token, setToken] =useState(null);
 
     useEffect(()=> {
-        fetch("https://myflix-movies-2a93844126ef.herokuapp.com/movies")
+        fetch("https://myflix-movies-2a93844126ef.herokuapp.com/movies",
+        {
+            headers: {Authorization: `Bearer ${token}`}
+        })
         .then ((response)=> response.json())
-        .then((moviesData) => {
-            const moviesFromApi = moviesData.map((movie) => {
+        .then((data) => {
+            const moviesFromApi = data.map((movie) => {
                 return {
                     id: movie._id,
                     imagePath: movie.imagePath,
@@ -34,10 +38,17 @@ export const MainView = () =>{
             });
             setMovies(moviesFromApi);
         });
-    }, []);
+    }, [token]);
 
     if (!user){
-        return <LoginView onLoggedIn={(user)=> setUser (user)} />;
+        return (
+            <LoginView 
+                onLoggedIn={(user,token)=> {
+                    setUser (user);
+                    setToken(token);
+                }} 
+            />
+        );
     }
 
     if (selectedMovie) {
@@ -46,6 +57,7 @@ export const MainView = () =>{
                 <button
                     onClick={() => {
                         setUser(null);
+                        setToken(null);
                     }}
                 >
                     Logout
