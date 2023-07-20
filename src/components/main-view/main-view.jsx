@@ -39,10 +39,23 @@ export const MainView = () =>{
     if (!user){
         return <LoginView onLoggedIn={(user)=> setUser (user)} />;
     }
-    
+
     if (selectedMovie) {
         return (
-            <MovieView movie={selectedMovie} onBackClick={()=> setSelectedMovie(null)} />
+            <>
+                <button
+                    onClick={() => {
+                        setUser(null);
+                    }}
+                >
+                    Logout
+                </button>
+                
+                <MovieView 
+                    movie={selectedMovie} 
+                    onBackClick={()=> setSelectedMovie(null)} 
+                />
+            </>
         );
     }
 
