@@ -27182,7 +27182,7 @@ const MainView = ()=>{
         if (!token) return;
         fetch("https://myflix-movies-2a93844126ef.herokuapp.com/movies", {
             headers: {
-                Authorization: `Bearer${token}`
+                Authorization: `Bearer ${token}`
             }
         }).then((response)=>response.json()).then((data)=>{
             const moviesFromApi = data.map((movie)=>{
@@ -27262,17 +27262,31 @@ const MainView = ()=>{
         columnNumber: 16
     }, undefined);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        children: movies.map((movie)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieCard.MovieCard), {
-                movie: movie,
-                onMovieClick: (newSelectedMovie)=>{
-                    setSelectedMovie(newSelectedMovie);
-                }
-            }, movie.id, false, {
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                onClick: ()=>{
+                    setUser(null);
+                    setToken(null);
+                    localStorage.clear();
+                },
+                children: "Logout"
+            }, void 0, false, {
                 fileName: "src/components/main-view/main-view.jsx",
                 lineNumber: 91,
                 columnNumber: 17
-            }, undefined))
-    }, void 0, false, {
+            }, undefined),
+            movies.map((movie)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieCard.MovieCard), {
+                    movie: movie,
+                    onMovieClick: (newSelectedMovie)=>{
+                        setSelectedMovie(newSelectedMovie);
+                    }
+                }, movie.id, false, {
+                    fileName: "src/components/main-view/main-view.jsx",
+                    lineNumber: 101,
+                    columnNumber: 17
+                }, undefined))
+        ]
+    }, void 0, true, {
         fileName: "src/components/main-view/main-view.jsx",
         lineNumber: 89,
         columnNumber: 9
@@ -28484,8 +28498,8 @@ const LoginView = ({ onLoggedIn })=>{
     const handleSubmit = (event)=>{
         event.preventDefault();
         const data = {
-            access: username,
-            secret: password
+            username: username,
+            password: password
         };
         fetch("https://myflix-movies-2a93844126ef.herokuapp.com/login", {
             method: "POST",

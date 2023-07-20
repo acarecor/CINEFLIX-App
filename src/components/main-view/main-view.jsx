@@ -18,7 +18,7 @@ export const MainView = () =>{
         }
         fetch("https://myflix-movies-2a93844126ef.herokuapp.com/movies",
         {
-            headers: {Authorization: `Bearer${token}` }
+            headers: { Authorization: `Bearer ${token}` }
         })
         .then ((response)=> response.json())
         .then((data) => {
@@ -87,6 +87,16 @@ export const MainView = () =>{
     }
     return (
         <div>
+            
+                <button
+                    onClick={() => {
+                        setUser(null);
+                        setToken(null);
+                        localStorage.clear();
+                    }}
+                >
+                    Logout
+                </button>
             {movies.map((movie) => (
                 <MovieCard
                 key = {movie.id}
