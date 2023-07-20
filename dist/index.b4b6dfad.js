@@ -27182,7 +27182,7 @@ const MainView = ()=>{
         if (!token) return;
         fetch("https://myflix-movies-2a93844126ef.herokuapp.com/movies", {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: "Bearer ${token}"
             }
         }).then((response)=>response.json()).then((data)=>{
             const moviesFromApi = data.map((movie)=>{
