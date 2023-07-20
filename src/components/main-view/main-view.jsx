@@ -4,12 +4,17 @@ import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 
 export const MainView = () =>{
-    const [ movies, setMovies ] = useState ([]); 
-    const [selectedMovie, setSelectedMovie] = useState (null);
+    const storedUser = JSON.parse(localStorage.getItem ("user"));
+    const storedToken =localStorage.getItem("token");
     const [user,setUser] = useState (null);
     const [token, setToken] =useState(null);
+    const [movies, setMovies ] = useState ([]); 
+    const [selectedMovie, setSelectedMovie] = useState (null);
 
     useEffect(()=> {
+        if(!token){
+            return;
+        }
         fetch("https://myflix-movies-2a93844126ef.herokuapp.com/movies",
         {
             headers: {Authorization: `Bearer ${token}`}
@@ -58,6 +63,7 @@ export const MainView = () =>{
                     onClick={() => {
                         setUser(null);
                         setToken(null);
+                        localStorage.clear();
                     }}
                 >
                     Logout
