@@ -1,4 +1,3 @@
-import "./movie-view.scss";
 import { Button, Card, Accordion } from "react-bootstrap";
 
 export const MovieView = ({ movie, onBackClick }) => {
