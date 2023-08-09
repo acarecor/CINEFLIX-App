@@ -1,13 +1,13 @@
 import { Button, Card } from "react-bootstrap";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import {Link} from "react-router-dom";
 
-export const MovieView = ({ movie }) => {
+export const MovieView = ({ movies }) => {
     const { movieId } = useParams();
-    const movie = movies.find((m)=> m.id === movieId);
+    const movie = movies.find((b)=> b.id === movieId);
 
   return (
-    <Card className="h-100">
+    <Card  className="h-100">
       <Card.Img variant="top" src={movie.imagePath} />
 
       <Card.Body>
