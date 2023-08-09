@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -17,7 +18,6 @@ export const MovieCard = ( { movie }) => {
                 </Link>
             </Card.Body>
         </Card>
-       
     );
 };
 
@@ -25,15 +25,15 @@ MovieCard.propTypes = {
     movie: PropTypes.shape({
             imagePath: PropTypes.string,
             title: PropTypes.string.isRequired,
-            description: PropTypes.string.isRequired,
+            //description: PropTypes.string.isRequired,
             director: PropTypes.shape({
-                name: PropTypes.string, 
-                bio:PropTypes.string,
-                birth: PropTypes.date}),
-            genre: PropTypes.shape({
-                name:PropTypes.string,
-                description: PropTypes.string}),
+                name: PropTypes.string}), 
+                //bio:PropTypes.string,
+                //birth: PropTypes.date}),
+            //genre: PropTypes.shape({
+              //  name:PropTypes.string,
+                //description: PropTypes.string}),
             year: PropTypes.string
-        }).isRequired,
-        onMovieClick: PropTypes.func.isRequired
+        }).isRequired
+        
     };
