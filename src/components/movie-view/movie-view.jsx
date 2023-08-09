@@ -1,6 +1,11 @@
-import { Button, Card, Accordion } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
+import { useParams } from "react-router";
+import {Link} from "react-router-dom";
 
-export const MovieView = ({ movie, onBackClick }) => {
+export const MovieView = ({ movie }) => {
+    const { movieId } = useParams();
+    const movie = movies.find((m)=> m.id === movieId);
+
   return (
     <Card className="h-100">
       <Card.Img variant="top" src={movie.imagePath} />
@@ -15,13 +20,14 @@ export const MovieView = ({ movie, onBackClick }) => {
         <Card.Title> Genre: {movie.genre.name}</Card.Title>
         <Card.Text>{movie.genre.description}</Card.Text>
         <Card.Text>Year: {movie.year}</Card.Text>
-        <Button
-          variant="primary"
-          onClick={onBackClick}
-          style={{ cursor: "pointer" }}
-        >
-          Back
-        </Button>
+        <Link to={`/`}>
+            <Button
+                variant="primary"
+                style={{ cursor: "pointer" }}
+            >
+                Back
+            </Button>
+        </Link>
       </Card.Body>
     </Card>
   );
