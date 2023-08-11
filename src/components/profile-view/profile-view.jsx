@@ -1,8 +1,8 @@
-import PropTypes  from "prop-types";
 import React from "react";
 import { useState, useEffect } from "react";
 import { Button, Card, Container, Form, Row, Col } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
+import { MovieView } from "../movie-view/movie-view";
 
 
 export const ProfileView = ({ user, setUser, token, movies, onLoggedOut}) => {
@@ -12,13 +12,9 @@ export const ProfileView = ({ user, setUser, token, movies, onLoggedOut}) => {
   const [birthday, setBirthday] = useState(user.birthday);
   
 
-  const favoriteMoviesList = movies.filter((movie) => {
-    return user.favoritesMovies.includes(movie._id)
+  const favoriteMovies = movies.filter((movie) => {
+    return user.favoritesMovies.includes(movie.id);
   });
-
-  useEffect(() => {
-    console.log(user)
-  }, [user] )
 
 //Update a user account 
   const handleUpdate = (event) => {
@@ -44,8 +40,8 @@ export const ProfileView = ({ user, setUser, token, movies, onLoggedOut}) => {
     )
       .then((response) => {
         if (response.ok) {
+          return response.json(),
           alert("User information succesfully changed!");
-          window.location.reload();
         } else {
           alert("Something is wrong");
         }
@@ -88,13 +84,14 @@ export const ProfileView = ({ user, setUser, token, movies, onLoggedOut}) => {
       </Row>
       <Row>
         <h2>Favorites Movies</h2>
-        {favoriteMoviesList.map((movie) => (
-          <Col key={movie._id}>
+        {favoriteMovies.map((movie) => (
+          <Col key={movie.id}>
             <MovieCard movie={movie}
             ></MovieCard>
           </Col>
         ))}
       </Row>
+
       <Form className="profile-form" onSubmit={(e) => handleUpdate(e)}>
         <h2>Want to change some Info?</h2>
         <Form.Group>
@@ -142,12 +139,3 @@ export const ProfileView = ({ user, setUser, token, movies, onLoggedOut}) => {
   );
 };
 
-ProfileView.propTypes = {
-  user: PropTypes.object,
-  setUser:PropTypes.func,
-  movies: PropTypes.array,
-  onLoggedOut:PropTypes.func,
-  user:PropTypes.shape({
-    favoritesMovies: PropTypes.array}),
-
-};
