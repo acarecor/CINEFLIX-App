@@ -5,21 +5,24 @@ import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { ProfileView } from "../profile-view/profile-view";
-import {Row, Button,Form,Card} from "react-bootstrap";
-import Col from "react-bootstrap/Col";
+import { Row, Col, Button, Form, Card } from "react-bootstrap";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 export const MainView = () => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const storedUser = localStorage.getItem("user");
   const storedToken = localStorage.getItem("token");
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(storedUser ? storedUser : null);
+  const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
-  const [users, setUsers] =useState([]);
-  const [email, setEmail]=useState([]);
+  const [users, setUsers] = useState([]);
+  const [email, setEmail] = useState([]);
   //const [selectedMovie, setSelectedMovie] = useState(null);
-
+  const onLoggedOut = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.clear();
+  };
   useEffect(() => {
     if (!token) {
       return;
@@ -62,6 +65,8 @@ export const MainView = () => {
         user={user}
         onLoggedOut={() => {
           setUser(null);
+          setToken(null);
+          localStorage.clear();
         }}
       />
       <Row className="justify-content-md-center">
@@ -143,11 +148,15 @@ export const MainView = () => {
                   <Navigate to="/login" replace />
                 ) : (
                   <>
-                      <Col className="mb-5" key={user.username} md={3}>
-                        <p>Hey {user.username}!</p>
-                        <p> Email: {user.email}</p>
-                        <ProfileView />
-                      </Col>
+                    <Col className="mb-5" key={user.username} md={3}>
+                      <ProfileView
+                        user={user}
+                        token={token}
+                        setUser={setUser}
+                        movies={movies}
+                        onLoggedOut={onLoggedOut}
+                      />
+                    </Col>
                   </>
                 )}
               </>
