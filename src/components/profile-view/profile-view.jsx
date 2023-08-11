@@ -1,6 +1,6 @@
 import PropTypes  from "prop-types";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Card, Container, Form, Row, Col } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 
@@ -12,9 +12,13 @@ export const ProfileView = ({ user, setUser, token, movies, onLoggedOut, favorit
   const [birthday, setBirthday] = useState(user.birthday);
   
 
-  const favoriteMovies = movies.filter((movie) => {
-    return user.favoritesMovies.includes(movie._id);
+  const favoriteMoviesList = movies.filter((m) => {
+    return user.favoritesMovies.includes(m._id)
   });
+
+  useEffect(() => {
+    console.log(user)
+  }, [user] )
 
   const handleUpdate = (event) => {
     event.preventDefault();
@@ -85,9 +89,10 @@ export const ProfileView = ({ user, setUser, token, movies, onLoggedOut, favorit
         </Col>
       </Row>
       <Row>
-        {favoriteMovies.map((movie) => (
+        {favoriteMoviesList.map((movie) => (
           <Col key={movie._id}>
-            <MovieCard movie={movie}></MovieCard>
+            <MovieCard movie={movie}
+            ></MovieCard>
           </Col>
         ))}
       </Row>
@@ -143,7 +148,7 @@ ProfileView.propTypes = {
   setUser:PropTypes.func.isRequired,
   movies: PropTypes.array.isRequired,
   onLoggedOut:PropTypes.func.isRequired,
-  favoritesMovies:PropTypes.array.isRequired,
+  favoritesMovies: PropTypes.array,
 
 };
 
