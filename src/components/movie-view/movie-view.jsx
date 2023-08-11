@@ -1,8 +1,9 @@
 import { Button, Card } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import {Link} from "react-router-dom";
+import { Favorites } from "../profile-view/favorite-movies";
 
-export const MovieView = ({ movies }) => {
+export const MovieView = ({ movies, user, setUser, token, removeFav, addFav }) => {
     const { movieId } = useParams();
     const movie = movies.find((b)=> b.id === movieId);
 
@@ -20,6 +21,12 @@ export const MovieView = ({ movies }) => {
         <Card.Title> Genre: {movie.genre.name}</Card.Title>
         <Card.Text>{movie.genre.description}</Card.Text>
         <Card.Text>Year: {movie.year}</Card.Text>
+        <Favorites 
+          user={user}
+          setUser={setUser}
+          token={token}
+          addFav={addFav}
+          removeFav={removeFav}/>
         <Link to={`/`}>
             <Button
                 variant="primary"
