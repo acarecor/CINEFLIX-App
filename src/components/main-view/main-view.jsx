@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
+
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { ProfileView } from "../profile-view/profile-view";
-import { Row, Col, Button, Form, Card } from "react-bootstrap";
 
+import { Row, Col, Button, Form, Card } from "react-bootstrap";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 export const MainView = () => {
@@ -15,18 +16,18 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [email, setEmail] = useState([]);
-  //const [selectedMovie, setSelectedMovie] = useState(null);
+  
   const onLoggedOut = () => {
     setUser(null);
     setToken(null);
     localStorage.clear();
   };
+
   useEffect(() => {
     if (!token) {
       return;
     }
+
     fetch("https://myflix-movies-2a93844126ef.herokuapp.com/movies", {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -65,8 +66,6 @@ export const MainView = () => {
         user={user}
         onLoggedOut={() => {
           setUser(null);
-          setToken(null);
-          localStorage.clear();
         }}
       />
       <Row className="justify-content-md-center">
@@ -114,7 +113,11 @@ export const MainView = () => {
                   <Col> The list is empty!</Col>
                 ) : (
                   <Col md={8}>
-                    <MovieView movies={movies} />
+                    <MovieView 
+                    movies={movies}
+                    user={user}
+                    setUser={setUser}
+                    token={token} />
                   </Col>
                 )}
               </>
@@ -148,7 +151,9 @@ export const MainView = () => {
                   <Navigate to="/login" replace />
                 ) : (
                   <>
-                    <Col className="mb-5" key={user.username} md={3}>
+                    <Col className="mb-5" 
+                    //key={user.username}
+                     md={3}>
                       <ProfileView
                         user={user}
                         token={token}

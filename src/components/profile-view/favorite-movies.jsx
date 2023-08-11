@@ -1,11 +1,17 @@
+import { useState, useEffect } from "react";
 import { Button, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 
-export  const addToFavorites = ({ user, token, favoritesMovies, movies }) => {
-    const handleClick = (event) => {
-      event.preventDefault();
-      if (user.favoritesMovies.includes(movie._id)) {
+export  const Favorites = ({ user, token, setUser, movies}) => {
+  const [ fav, setFav ] = useState(false);
+  
+  useEffect(()=> {
+    const addFavorite = user.favoritesMovies.includes(movieId)
+    setFav (addFavorite)
+  }, [])
+
+  const removeFav = () => {
         fetch(
           "https://myflix-movies-2a93844126ef.herokuapp.com/users/${user.username}/movies/${movies._id}",
           {
@@ -14,18 +20,19 @@ export  const addToFavorites = ({ user, token, favoritesMovies, movies }) => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(data),
-          }
-        )
+        })
           .then((response) => response.json())
-          .then((response) => {
+          .then((data) => {
+            setFav(false);
+            localStorage.setItem("user", JSON.stringify(data));
+            setUser(data);
             alert("movie was deleted from your list!");
-            window.location.reload();
           })
           .catch((error) => {
             alert("Something is wrong");
           });
-      } else {
+      };
+  const addFav= ()=> {
         fetch(
           "https://myflix-movies-2a93844126ef.herokuapp.com/users/${user.username}/movies/${movie._id}",
           {
@@ -34,27 +41,29 @@ export  const addToFavorites = ({ user, token, favoritesMovies, movies }) => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(data),
           }
-        ).then((response) => response.json());
-        if (response.ok) {
+        ).then((response) => response.json())
+        .then((data) => {
+          setFav(true);
+          localStorage.setItem("user", JSON.stringify(data));
+          setUser(data);
           alert("movie was added to your list!");
-          window.location.reload();
-        } else {
-          alert("Something is wrong");
-        }
-      }
+        })
+        .catch((error) => {
+            alert("Something is wrong");
+          });
+        
     };
   
 
   return (
     <Col>
-      {favoritesMovies.includes(movies._id) ?(
-            <Button variant="secondary" onClick={handleClick} >
+      {fav ? (
+            <Button variant="secondary" onClick={removeFav} >
               Remove from List
             </Button>
       ):(
-            <Button variant="secondary" onClick={handleClick}>
+            <Button variant="secondary" onClick={addFav}>
               Add to List
             </Button>
           
