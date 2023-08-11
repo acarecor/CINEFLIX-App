@@ -1,135 +1,149 @@
+import PropTypes  from "prop-types";
 import React from "react";
 import { useState } from "react";
-import { Button, Card, Container, Form, Label } from "react-bootstrap";
-import { FavoriteMovies } from "./favorite-movies";
+import { Button, Card, Container, Form, Row, Col } from "react-bootstrap";
+import { MovieCard } from "../movie-card/movie-card";
 
 
-export const ProfileView = ({user, token}) => {
-  const [username, setUsername] = useState("");
+export const ProfileView = ({ user, setUser, token, movies, onLoggedOut, favoritesMovies}) => {
+  const [username, setUsername] = useState(user.username);
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [birthday, setBirthday] = useState("");
-  
-    //function to get favorites Movies 
-   
-    //const getUser= () => {
-
-    //}
-   
-    
-    const handleUpdate = (event) => {
-          event.preventDefault();
-      
-          const updateData = {
-            username: username,
-            password: password,
-            email: email,
-            birthday: birthday,
-          };
-  
-          fetch("https://myflix-movies-2a93844126ef.herokuapp.com/users/${user.username}", {
-              method: "PUT",
-              headers: {
-                Authorization: `Bearer ${("token")}`
-              },
-              body: JSON.stringify(updateData),
-            }).then((response) => {
-              if (response.ok) {
-                alert("User information succesfully changed!");
-                window.location.reload();
-              } else {
-                alert("Something is wrong");
-              }})
-              .catch((error) => 
-                console.log(error))
-               
-            };
-         
+  const [email, setEmail] = useState(user.email);
+  const [birthday, setBirthday] = useState(user.birthday);
   
 
-   
+  const favoriteMovies = movies.filter((movie) => {
+    return user.favoritesMovies.includes(movie._id);
+  });
 
+  const handleUpdate = (event) => {
+    event.preventDefault();
 
-    //return (
-      //<Container>
-        //<UserInfo name={user.username} email={user.email} />
-        //<FavoriteMovies />
-        //<UpdateUser />
-      //</Container>
-    //);
+    const data = {
+      username: username,
+      password: password,
+      email: email,
+      birthday: birthday,
+    };
 
-    
-    return (
+    fetch(
+      "https://myflix-movies-2a93844126ef.herokuapp.com/users/${user.username}",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${"token"}`,
+        },
+        body: JSON.stringify(data),
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          alert("User information succesfully changed!");
+          window.location.reload();
+        } else {
+          alert("Something is wrong");
+        }
+      })
+      .then((data) => {
+        localStorage.setItem("user", JSON.stringify(data));
+        setUser(data);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleDeleteUser = (event) => {
+      event.preventDefault();
+
+      fetch(
+        "https://myflix-movies-2a93844126ef.herokuapp.com/users/${user.username}",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        }
+      ).then((response) => {
+        if (response.ok) {
+          alert("User deleted!");
+          onLoggedOut();
+        } else {
+          alert("Something is wrong");
+        }
+      });
+    };
+  
+
+  return (
     <Container>
-      <Form className="profile-form" onSubmit={(e)=> handleUpdate(e)}>
-          <h2>Want to change some Info?</h2>
-          <Form.Group>
-            <Form.Label>Username:</Form.Label>
-            <Form.Control
-                type="text"
-                name="Username"
-                defaultValue={username}
-                onChange={e =>setUsername(e.target.value)} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Password</Form.Label>
-            <Form.Control 
-                type="text"
-                password="password"
-                defaultValue={password}
-                onChange={e => setPassword(e.target.value)} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-                type="text"
-                email="email"
-                defaultValue={email}
-                onChange={e => setEmail(e.target.value)} />
-          </Form.Group>
-          <Form.Group>
+      <Row>
+        <Col>
+          <div>Hey {username}!</div>
+          <div> Email: {email}</div>
+        </Col>
+      </Row>
+      <Row>
+        {favoriteMovies.map((movie) => (
+          <Col key={movie._id}>
+            <MovieCard movie={movie}></MovieCard>
+          </Col>
+        ))}
+      </Row>
+      <Form className="profile-form" onSubmit={(e) => handleUpdate(e)}>
+        <h2>Want to change some Info?</h2>
+        <Form.Group>
+          <Form.Label>Username:</Form.Label>
+          <Form.Control
+            type="text"
+            name="Username"
+            defaultValue={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="text"
+            password="password"
+            defaultValue={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            type="text"
+            email="email"
+            defaultValue={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
           <Form.Label>Birthday</Form.Label>
           <Form.Control
-              type="date"
-              birthday="birthday"
-              defaultValue={birthday}
-              onChange={e => setBirthday(e.target.value)} />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Submit
+            type="date"
+            birthday="birthday"
+            defaultValue={birthday}
+            onChange={(e) => setBirthday(e.target.value)}
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Submit
         </Button>
       </Form>
+      <Button variant="primary" onClick={handleDeleteUser}>Delete User</Button>
     </Container>
-    );
-      
+  );
 };
 
+ProfileView.propTypes = {
+  user: PropTypes.object.isRequired,
+  setUser:PropTypes.func.isRequired,
+  movies: PropTypes.array.isRequired,
+  onLoggedOut:PropTypes.func.isRequired,
+  favoritesMovies:PropTypes.array.isRequired,
 
-
-
-
-
-//const getUser = () => {
- // 
-  //fetch("https://myflix-movies-2a93844126ef.herokuapp.com/users/${user.username}", {
-   // method: "GET",
-    //headers: { 
-      //  "Content-Type":" application/json",
-        //Authorization: `Bearer ${token}` },
-    //body: JSON.stringify(user),
-  //}).then((response) => response.json())
-    //.then ((data) => {
-      //const favoritesMovies = movies.filter((movie) => user.favoritesMovies.includes(m._id))
-      //setFavoritesMovies(movies);
-    //})
-    //.catch((error) => 
-      //  console.log(error))
-      //};
-    
-      //useEffect(() => {
-        //getFavoritesMovies();
-      //}, [user,favoritesMovies]);
-
-
-
+};
 
