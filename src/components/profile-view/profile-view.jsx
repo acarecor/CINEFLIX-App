@@ -5,21 +5,22 @@ import { Button, Card, Container, Form, Row, Col } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 
 
-export const ProfileView = ({ user, setUser, token, movies, onLoggedOut, favoritesMovies}) => {
+export const ProfileView = ({ user, setUser, token, movies, onLoggedOut}) => {
   const [username, setUsername] = useState(user.username);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState(user.email);
   const [birthday, setBirthday] = useState(user.birthday);
   
 
-  const favoriteMoviesList = movies.filter((m) => {
-    return user.favoritesMovies.includes(m._id)
+  const favoriteMoviesList = movies.filter((movie) => {
+    return user.favoritesMovies.includes(movie._id)
   });
 
   useEffect(() => {
     console.log(user)
   }, [user] )
 
+//Update a user account 
   const handleUpdate = (event) => {
     event.preventDefault();
 
@@ -52,22 +53,18 @@ export const ProfileView = ({ user, setUser, token, movies, onLoggedOut, favorit
       .then((data) => {
         localStorage.setItem("user", JSON.stringify(data));
         setUser(data);
-      })
-      .catch((error) => console.log(error));
+      });
   };
-
-  const handleDeleteUser = (event) => {
-      event.preventDefault();
-
+//Delete a user account function 
+  const handleDeleteUser = () => {
+    
       fetch(
         "https://myflix-movies-2a93844126ef.herokuapp.com/users/${user.username}",
         {
           method: "DELETE",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(data),
         }
       ).then((response) => {
         if (response.ok) {
@@ -83,12 +80,14 @@ export const ProfileView = ({ user, setUser, token, movies, onLoggedOut, favorit
   return (
     <Container>
       <Row>
+      <h2>Profile</h2>
         <Col>
-          <div>Hey {username}!</div>
-          <div> Email: {email}</div>
+          <div>Hey {user.username}!</div>
+          <div> Email: {user.email}</div>
         </Col>
       </Row>
       <Row>
+        <h2>Favorites Movies</h2>
         {favoriteMoviesList.map((movie) => (
           <Col key={movie._id}>
             <MovieCard movie={movie}
@@ -144,11 +143,11 @@ export const ProfileView = ({ user, setUser, token, movies, onLoggedOut, favorit
 };
 
 ProfileView.propTypes = {
-  user: PropTypes.object.isRequired,
-  setUser:PropTypes.func.isRequired,
-  movies: PropTypes.array.isRequired,
-  onLoggedOut:PropTypes.func.isRequired,
-  favoritesMovies: PropTypes.array,
+  user: PropTypes.object,
+  setUser:PropTypes.func,
+  movies: PropTypes.array,
+  onLoggedOut:PropTypes.func,
+  user:PropTypes.shape({
+    favoritesMovies: PropTypes.array}),
 
 };
-
