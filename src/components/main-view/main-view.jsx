@@ -15,6 +15,7 @@ import {
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./main-view.scss";
 
+
 export const MainView = () => {
   const storedUser = localStorage.getItem("user");
   const storedToken = localStorage.getItem("token");
@@ -35,7 +36,7 @@ export const MainView = () => {
     localStorage.clear();
   };
 
-  //get all movies
+  //get all movies from db
   useEffect(() => {
     if (!token) {
       return;
