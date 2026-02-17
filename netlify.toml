@@ -1,5 +1,8 @@
+[build]
+  command = "parcel build src/index.html --dist-dir dist"
+  publish = "dist"
+
 [[redirects]]
   from = "/*"
-  to = "/"
+  to = "/index.html"
   status = 200
-  
