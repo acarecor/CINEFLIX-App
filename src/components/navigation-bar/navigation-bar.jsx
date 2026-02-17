@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import "./navigation-bar.scss";
 import logo from "../images/logocf2.png";
 
+
 export const NavigationBar = ({ user, onLoggedOut, handleSearchInput }) => {
+  console.log("NavigationBar rendering", logo);
   return (
     <Navbar
       collapseOnSelect
@@ -20,6 +22,7 @@ export const NavigationBar = ({ user, onLoggedOut, handleSearchInput }) => {
             height="auto"
             className="d-inline-block align top d-flex align-items-start"
             alt="my flix logo"
+            
           />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

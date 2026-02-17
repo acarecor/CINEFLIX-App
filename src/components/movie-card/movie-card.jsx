@@ -21,7 +21,7 @@ export const MovieCard = ({ movie, user, setUser, token }) => {
   const addFav = (event) => {
     event.preventDefault();
     fetch(
-      `https://myflix-movies-2a93844126ef.herokuapp.com/users/${user.username}/movies/${movie.id}`,
+      `https://movie-api-j617.onrender.com/users/${user.username}/movies/${movie.id}`,
       {
         method: "POST",
         headers: {
@@ -55,7 +55,7 @@ export const MovieCard = ({ movie, user, setUser, token }) => {
   //remove movie from user list
   const removeFav = () => {
     fetch(
-      `https://myflix-movies-2a93844126ef.herokuapp.com/users/${user.username}/movies/${movie.id}`,
+      `https://movie-api-j617.onrender.com/users/${user.username}/movies/${movie.id}`,
       {
         method: "DELETE",
         headers: {
