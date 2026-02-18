@@ -213,7 +213,7 @@ export const MainView = () => {
         </Row>
       </Container>
       <footer>
-        <div> 2023 Cineflix</div>
+        <div> 2026 Cineflix</div>
       </footer>
     </BrowserRouter>
   );

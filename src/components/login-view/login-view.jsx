@@ -31,7 +31,7 @@ export const LoginView = ({ onLoggedIn }) => {
           Swal.fire({
             position: "top-end",
             icon: "error",
-            title: "User no found!",
+            title: "User not found!",
             showConfirmButton: false,
             timer: 1500,
           });
@@ -40,6 +40,36 @@ export const LoginView = ({ onLoggedIn }) => {
       .catch((e) => {
         alert("Something went wrong");
       });
+  };
+  // New Function - Guest Login
+  const handleGuestLogin = () => {
+    setUsername("guest");
+    setPassword("GuestDemo2026!");
+    
+    // Auto-submit after setting the credentials
+    setTimeout(() => {
+      const data = {
+        username: "guest",
+        password: "GuestDemo!2026!1",
+      };
+
+      fetch(`https://movie-api-j617.onrender.com/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.user) {
+            localStorage.setItem("user", JSON.stringify(data.user));
+            localStorage.setItem("token", data.token);
+            onLoggedIn(data.user, data.token);
+          }
+        })
+          .catch((e) => {
+          alert("Something went wrong");
+        });
+    }, 100);
   };
 
   return (
@@ -77,6 +107,23 @@ export const LoginView = ({ onLoggedIn }) => {
               </Col>
             </Row>
           </Form>
+           
+          {/* New- Botón Guest */}
+          <p className="d-flex justify-content-center mt-3 mb-2 text-muted">
+            or
+          </p>
+          <Row className="mb-2">
+            <Col className="d-flex justify-content-center">
+              <Button 
+                variant="outline-secondary" 
+                onClick={handleGuestLogin}
+                style={{ width: '200px' }}
+              >
+                Try as Guest
+              </Button>
+            </Col>
+          </Row>
+
           <p className="d-flex justify-content-center mt-1"> or </p>
           <Link
             className="d-flex justify-content-center"
