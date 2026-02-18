@@ -1,10 +1,12 @@
 import { Navbar, Container, Nav, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./navigation-bar.scss";
 import logo from "../images/logocf2.png";
 
 
 export const NavigationBar = ({ user, onLoggedOut, handleSearchInput }) => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
   console.log("NavigationBar rendering", logo);
   return (
     <Navbar
@@ -47,6 +49,7 @@ export const NavigationBar = ({ user, onLoggedOut, handleSearchInput }) => {
                   Profile
                 </Nav.Link>
                 <Nav.Link onClick={onLoggedOut}>Logout</Nav.Link>
+                {isHomePage && (
                 <Form>
                   <Form.Control
                     id="search-bar"
@@ -56,6 +59,7 @@ export const NavigationBar = ({ user, onLoggedOut, handleSearchInput }) => {
                     style={{ background: "black" }}
                   />
                 </Form>
+                )}
               </>
             )}
           </Nav>
