@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Button, Card, Container, Form, Row, Col } from "react-bootstrap";
+import { Button, Card, Container, Form, Row, Col , Alert} from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 import { Modal } from "react-bootstrap";
 
@@ -19,6 +19,11 @@ export const ProfileView = ({
   const [birthday, setBirthday] = useState(user.birthday);
   const [showModal, setShowModal] = useState(false);
 
+
+  // Check if the user is guest 
+  const isGuest = user.username === 'guest';
+
+
   const favoriteMovies = movies.filter((movie) =>
     user.favoritesMovies.includes(movie.id)
   );
@@ -26,6 +31,12 @@ export const ProfileView = ({
   //Update a user account
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // Prevent changes if the user is guest  
+    if (isGuest) {
+      alert("Guest account settings cannot be modified. Please create your own account to customize your profile.");
+      return;
+    }
 
     const data = {
       username: username,
@@ -48,7 +59,7 @@ export const ProfileView = ({
       .then((response) => {
         if (response.ok) {
           return (
-            response.json(), alert("User information succesfully changed!")
+            response.json(), alert("User information successfully changed!")
           );
         }
       })
@@ -64,6 +75,13 @@ export const ProfileView = ({
 
   //Delete a user account function
   const handleDeleteUser = () => {
+
+    // Prevent delete account if is guest
+    if (isGuest) {
+      alert("Guest account cannot be deleted. Please create your own account.");
+      return;
+    }
+
     fetch(
       `https://movie-api-j617.onrender.com/users/${user.username}`,
       {
@@ -103,6 +121,14 @@ export const ProfileView = ({
         <Col xs={12} sm={8}>
           <Card>
             <Card.Body className="mb-3">
+              {/* ALERT for GUEST */}
+              {isGuest && (
+                <Alert variant="warning" className="mb-3">
+                  <Alert.Heading>Guest Account</Alert.Heading>
+                  You're using a demo account. Profile settings cannot be modified. 
+                  Please <Alert.Link href="/signup">create your own account</Alert.Link> to customize your profile.
+                </Alert>
+              )}
               <Form className="profile-form" onSubmit={(e) => handleSubmit(e)}>
                 <h4>Want to change some Info?</h4>
                 <Form.Group className="mb-3">
@@ -112,6 +138,7 @@ export const ProfileView = ({
                     name="Username"
                     defaultValue={user.username}
                     onChange={(e) => setUsername(e.target.value)}
+                    disabled={isGuest}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -144,14 +171,14 @@ export const ProfileView = ({
                 </Form.Group>
                 <Row>
                   <Col>
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" disabled={isGuest}>
                       Submit
                     </Button>
                   </Col>
                   <Col> </Col>
                   <Col>
                     <>
-                      <Button variant="primary" onClick={handleShowModal}>
+                      <Button variant="primary" onClick={handleShowModal} disabled={isGuest}>
                         Delete account
                       </Button>
 
