@@ -6,6 +6,7 @@ import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { ProfileView } from "../profile-view/profile-view";
+import { NotFound } from "../not-found/not-found";
 
 import {
   Row,
@@ -159,6 +160,11 @@ export const MainView = () => {
                     <Navigate to="/login" replace />
                   ) : movies.length === 0 ? (
                     <Col> The list is empty!</Col>
+                    ) : filteredMovies.length === 0 ? (
+                     <Col className="text-center mt-5">
+                       <h3>No movies found</h3>
+                       <p>Try searching for something else</p>
+                    </Col>
                   ) : (
                     <>
                       {filteredMovies.map((movie) => (
@@ -209,6 +215,8 @@ export const MainView = () => {
                 </>
               }
             />
+            {/* Catch-all route for 404 */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Row>
       </Container>
