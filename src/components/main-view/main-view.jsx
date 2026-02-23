@@ -18,7 +18,7 @@ import "./main-view.scss";
 
 
 export const MainView = () => {
-  const storedUser = localStorage.getItem("user");
+  const storedUser = JSON.parse(localStorage.getItem("user")); //add JSON.parse to recover an object
   const storedToken = localStorage.getItem("token");
   const [user, setUser] = useState(storedUser);
   const [token, setToken] = useState(storedToken);
