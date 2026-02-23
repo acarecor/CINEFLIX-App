@@ -24,9 +24,14 @@ export const ProfileView = ({
   const isGuest = user.username === 'guest';
 
 
+  //const favoriteMovies = movies.filter((movie) =>
+  //  user.favoritesMovies.includes(movie.id)
+  //);
+  //fix: use empty array if favoritesMovies is undefined
   const favoriteMovies = movies.filter((movie) =>
-    user.favoritesMovies.includes(movie.id)
+    (user.favoritesMovies || []).includes(movie.id)
   );
+
 
   //Update a user account
   const handleSubmit = (event) => {
