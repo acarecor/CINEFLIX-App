@@ -1,8 +1,8 @@
 import { Navbar, Container, Nav, Form } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import "./navigation-bar.scss";
-import logo from "../images/logocf2.png";
-
+//import logo from "../images/logocf2.png";
+const logo = 'https://res.cloudinary.com/dmlsaneqr/image/upload/v1771849893/logocf2_ghuj9d.png';
 
 
 export const NavigationBar = ({ user, onLoggedOut, handleSearchInput }) => {
